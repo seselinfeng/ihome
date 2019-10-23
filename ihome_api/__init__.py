@@ -7,6 +7,7 @@ from flask_session import Session
 from flask_wtf import CSRFProtect
 from logging.handlers import TimedRotatingFileHandler
 from os import path
+from ihome_api.utils.commons import ReConverter
 import time
 import redis
 import logging
@@ -25,7 +26,7 @@ log_file_path = path.join(path.dirname(path.abspath(__file__)), 'logs/%s.log' % 
 file_log_handler = TimedRotatingFileHandler(log_file_path, when='D', interval=1, backupCount=10)
 
 # 创建日志记录的格式
-formatter = logging.Formatter('[%(asctime)s] - %(filename)s] - %(levelname)s: %(message)s')
+formatter = logging.Formatter('%(levelname)s %(filename)s:%(lineno)d %(message)s')
 
 # 为日志记录器设置日志记录格式
 file_log_handler.setFormatter(formatter)
@@ -56,8 +57,13 @@ def create_app(config_name):
     # 为flask补充csrf防护
     CSRFProtect(app)
 
+    # 为flask添加自定义的转换器
+    app.url_map.converters['re'] = ReConverter
+
     # 注册蓝图(解决和db循环导入问题）
     from ihome_api import api_1_0
     app.register_blueprint(api_1_0.api, url_prefix='/api/v1.0')
+    from ihome_api import web_html
+    app.register_blueprint(web_html.html)
 
     return app

@@ -13,20 +13,20 @@ class Config(object):
     PASSWORD = 'tigerQAZ#8'
     HOST = '192.168.9.208'
     PORT = 3306
-    DATABASE = 'test'
+    DATABASE = 'ih_test'
 
     SQLALCHEMY_DATABASE_URI = "{}+{}://{}:{}@{}:{}/{}?charset=utf8".format(DIALECT, DRIVER, USERNAME, PASSWORD, HOST,
                                                                            PORT,
                                                                            DATABASE)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # redis
-    # REDIS_HOST = '127.0.0.1'
-    # REDIS_PORT = 6379
+    redis
+    REDIS_HOST = '127.0.0.1'
+    REDIS_PORT = 6379
 
     # flask-session配置
-    # SESSION_TYPE = 'redis'
-    # SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
     SESSION_USE_SIGNER = True  # 对cookie中的session_id进行隐藏处理
     PERMANENT_SESSION_LIFETIME = 86400  # session数据的有效期
 
