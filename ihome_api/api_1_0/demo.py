@@ -4,7 +4,7 @@ from ihome_api import db
 from flask import current_app
 
 
-@api.route('/index')
+@api.route('/demo')
 def hello_world():
     current_app.logger.error('error msg')
     current_app.logger.warn('warn msg')

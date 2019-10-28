@@ -49,7 +49,7 @@ def create_app(config_name):
     # 初始化数据库
     db.init_app(app)
     global redis_store
-    # redis_store = redis.StrictRedis(host=config_class.REDIS_HOST, port=config_class.REDIS_PORT)
+    redis_store = redis.StrictRedis(host=config_class.REDIS_HOST, port=config_class.REDIS_PORT)
 
     # 利用flask-session将
     Session(app)

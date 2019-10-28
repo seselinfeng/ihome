@@ -25,7 +25,7 @@ function generateImageCode() {
     // 生成验证码编号 uuid
     imageCodeId = generateUUID();
     // 将uuid拼接成url设置到html页面中
-    var url = "/api/v1_0/image_codes/" + imageCodeId;
+    var url = "/api/v1.0/image_codes/" + imageCodeId;
     $(".image-code>img").attr("src", url);
 }
 
