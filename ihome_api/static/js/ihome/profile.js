@@ -1,8 +1,8 @@
 function showSuccessMsg() {
     $('.popup_con').fadeIn('fast', function() {
         setTimeout(function(){
-            $('.popup_con').fadeOut('fast',function(){}); 
-        },1000) 
+            $('.popup_con').fadeOut('fast',function(){});
+        },1000)
     });
 }
 
@@ -18,7 +18,7 @@ $(document).ready(function () {
         event.preventDefault();
         // jquery.form.min.js
         $(this).ajaxSubmit({
-            url: "/api/v1_0/users/avatar",
+            url: "/api/v1.0/users/avatar",
             type: "post",
             dataType: "json",
             headers: {
@@ -47,7 +47,7 @@ $(document).ready(function () {
             return;
         }
         $.ajax({
-            url:"/api/v1_0/user/name",
+            url:"/api/v1.0/users/name",
             type:"PUT",
             data: JSON.stringify({name: name}),
             contentType: "application/json",

@@ -3,11 +3,11 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
     // $('.popup_con').fadeIn('fast');
     // $('.popup_con').fadeOut('fast');
     // 向后端获取城区的信息
-    $.get("/api/v1_0/areas", function (resp) {
+    $.get("/api/v1.0/areas", function (resp) {
         if (resp.errno == 0) {
             // 获取到了城区信息
             // var areas = resp.data.areas;
@@ -29,15 +29,19 @@ $(document).ready(function(){
         e.preventDefault();
         // 获取表单数据，转换为json发送到后端
         var houseData = {};
-        $("#form-house-info").serializeArray().map(function(x){ houseData[x.name] = x.value});
+        $("#form-house-info").serializeArray().map(function (x) {
+            houseData[x.name] = x.value
+        });
 
         var facilities = [];
-        $(":checked[name=facility]").each(function(index, x){ facilities[index] = $(x).val()});
+        $(":checked[name=facility]").each(function (index, x) {
+            facilities[index] = $(x).val()
+        });
 
         houseData.facility = facilities;
 
         $.ajax({
-            url: "/api/v1_0/houses/info",
+            url: "/api/v1.0/houses/info",
             type: "post",
             data: JSON.stringify(houseData),
             contentType: "application/json",
@@ -68,16 +72,16 @@ $(document).ready(function(){
     $("#form-house-image").submit(function (e) {
         e.preventDefault();
         $("#form-house-image").ajaxSubmit({
-            url: "/api/v1_0/houses/image",
+            url: "/api/v1.0/houses/image",
             type: "post",
             dataType: "json",
             headers: {
                 "X-CSRFToken": getCookie("csrf_token")
             },
             success: function (resp) {
-                if (resp.errno == 0){
+                if (resp.errno == 0) {
                     // 保存图片成功
-                    $(".house-image-cons").append('<img src="'+ resp.data.image_url +'">');
+                    $(".house-image-cons").append('<img src="' + resp.data.image_url + '">');
                 } else if (resp.errno == 4101) {
                     location.href = "/login.html";
                 } else {

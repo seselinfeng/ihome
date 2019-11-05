@@ -1,8 +1,9 @@
 function showSuccessMsg() {
-    $('.popup_con').fadeIn('fast', function() {
-        setTimeout(function(){
-            $('.popup_con').fadeOut('fast',function(){}); 
-        },1000) 
+    $('.popup_con').fadeIn('fast', function () {
+        setTimeout(function () {
+            $('.popup_con').fadeOut('fast', function () {
+            });
+        }, 1000)
     });
 }
 
@@ -12,14 +13,13 @@ function getCookie(name) {
     return r ? r[1] : undefined;
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
     // 查询用户的实名认证信息
-    $.get("/api/v1_0/user/auth", function(resp){
+    $.get("/api/v1.0/user/auth", function (resp) {
         // 4101代表用户未登录
         if (resp.errno == 4101) {
             location.href = "/login.html";
-        }
-        else if (resp.errno == 0) {
+        } else if (resp.errno == 0) {
             // 如果返回的数据中real_name与id_card不为null，表示用户有填写实名信息
             if (resp.data.real_name && resp.data.id_card) {
                 $("#real-name").val(resp.data.real_name);
@@ -34,10 +34,10 @@ $(document).ready(function(){
     }, "json");
 
     // 管理实名信息表单的提交行为
-    $("#form-auth").submit(function(e){
+    $("#form-auth").submit(function (e) {
         e.preventDefault();
         // 如果用户没有填写完整，展示错误信息
-        if ($("#real-name").val()=="" || $("#id-card").val() == "") {
+        if ($("#real-name").val() == "" || $("#id-card").val() == "") {
             $(".error-msg").show();
         }
 
@@ -50,8 +50,8 @@ $(document).ready(function(){
 
         // 向后端发送请求
         $.ajax({
-            url:"/api/v1_0/user/auth",
-            type:"post",
+            url: "/api/v1.0/user/auth",
+            type: "post",
             data: jsonData,
             contentType: "application/json",
             dataType: "json",

@@ -15,7 +15,7 @@ def get_html(html_file_name):
         html_file_name = 'index.html'
 
     if html_file_name != 'favicon.ico':
-        html_file_name = 'html/' + html_file_name + '.html'
+        html_file_name = 'html/' + html_file_name
     # flask 提供的返回静态文件方法
     resp = make_response(current_app.send_static_file(html_file_name))
     current_app.logger.info('html_file_name:%s' % html_file_name)

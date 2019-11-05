@@ -32,7 +32,7 @@ $(document).ready(function() {
         // 将data转为json字符串
         var jsonData = JSON.stringify(data);
         $.ajax({
-            url:"/api/v1_0/sessions",
+            url:"/api/v1.0/sessions",
             type:"post",
             data: jsonData,
             contentType: "application/json",
@@ -40,15 +40,15 @@ $(document).ready(function() {
             headers:{
                 "X-CSRFToken":getCookie("csrf_token"),
             },
-            success: function (data) {
-                if (data.errno == 0) {
+            success: function (resp) {
+                if (resp.errno == 0) {
                     // 登录成功，跳转到主页
                     location.href = "/";
                     return;
                 }
                 else {
                     // 其他错误信息，在页面中展示
-                    $("#password-err span").html(data.errmsg);
+                    $("#password-err span").html(resp.errmsg);
                     $("#password-err").show();
                     return;
                 }

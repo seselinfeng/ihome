@@ -6,7 +6,7 @@ function getCookie(name) {
 // 点击退出按钮时执行的函数
 function logout() {
     $.ajax({
-        url: "/api/v1_0/session",
+        url: "/api/v1.0/sessions",
         type: "delete",
         headers: {
             "X-CSRFToken": getCookie("csrf_token")
@@ -21,7 +21,7 @@ function logout() {
 }
 
 $(document).ready(function(){
-    $.get("/api/v1_0/user", function(resp){
+    $.get("/api/v1.0/user", function(resp){
         // 用户未登录
         if (resp.errno == 4101) {
             location.href = "/login.html";
