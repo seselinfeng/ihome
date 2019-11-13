@@ -45,7 +45,7 @@ class User(BaseModel, db.Model):
             'user_id': self.id,
             'name': self.name,
             'mobile': self.mobile,
-            # 'avatar': constants.QINIU_URL_DOMAIN + self.user.avatar_url if self.user.avatar_url else "",
+            'avatar': self.avatar_url if self.avatar_url else "",
             'create_time': self.create_time.strftime('%Y-%M-%D %H:%M:%S')
         }
         return user_dict
@@ -115,12 +115,33 @@ class House(BaseModel, db.Model):
             'title': self.title,
             'price': self.price,
             'area_name': self.area.name,
-            'img_url': contants.QINIU_URL_DOMAIN + self.index_image_url if self.index_image_url else "",
+            'img_url': self.index_image_url if self.index_image_url else "",
             'room_count': self.room_count,
             'order_count': self.order_count,
             'address': self.address,
-            'user_avatar': contants.QINIU_URL_DOMAIN + self.user.avatar_url if self.user.avatar_url else "",
+            'user_avatar': self.user.avatar_url if self.user.avatar_url else "",
             'ctime': self.create_time.strftime('%Y-%M-%D')
+        }
+        return house_dict
+
+    def to_full_dict(self):
+        """将详细信息转换为字典数据"""
+        house_dict = {
+            "hid": self.id,
+            "user_id": self.user_id,
+            "user_name": self.user.name,
+            "user_avatar": self.user.avatar_url if self.user.avatar_url else "",
+            "title": self.title,
+            "price": self.price,
+            "address": self.address,
+            "room_count": self.room_count,
+            "acreage": self.acreage,
+            "unit": self.unit,
+            "capacity": self.capacity,
+            "beds": self.beds,
+            "deposit": self.deposit,
+            "min_days": self.min_days,
+            "max_days": self.max_days,
         }
         return house_dict
 
@@ -169,3 +190,18 @@ class Order(BaseModel, db.Model):
         ),
         default="WAIT_ACCEPT", index=True)
     comment = db.Column(db.Text)  # 订单的评论信息或者拒单原因
+
+    def to_basic_dict(self):
+        order_dict = {
+            'order_id': self.id,
+            "title": self.house.title,
+            "img_url": self.house.index_image_url if self.house.index_image_url else "",
+            "start_date": self.begin_date.strftime("%Y-%m-%d"),
+            "end_date": self.end_date.strftime("%Y-%m-%d"),
+            "ctime": self.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "days": self.days,
+            "amount": self.amount,
+            "status": self.status,
+            "comment": self.comment if self.comment else ""
+        }
+        return order_dict

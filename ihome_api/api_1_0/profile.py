@@ -8,7 +8,38 @@ from ihome_api.models import User
 from ihome_api import db, redis_store
 from ihome_api import contants
 from sqlalchemy.exc import IntegrityError
+import os
 
+
+#
+# @api.route('/users/avatar', methods=['POST'])
+# @login_required
+# def set_user_avatar():
+#     """设置用户的头像
+#     @:param 图片（多媒体表单）、用户ID(g对象)
+#     """
+#     user_id = g.user_id
+#     image_file = request.files.get('avatar')
+#     if image_file is None:
+#         return jsonify(errno=RET.PARAMERR, errmsg='未上传图片')
+#
+#     image_data = image_file.read()
+#     # 调用七牛上传图片
+#     try:
+#         file_name = storage(image_data)
+#     except Exception as e:
+#         current_app.logger.error(e)
+#         return jsonify(errno=RET.THIRDERR, errmsg='图片上传异常')
+#     # 保存文件名到数据库中
+#     try:
+#         User.query.filter_by(id=user_id).update({"avatar_url": file_name})
+#         db.session.commit()
+#     except Exception as e:
+#         db.session.rollback()
+#         current_app.logger.error(e)
+#         return jsonify(errno=RET.DBERR, errmsg='保存图片失败')
+#
+#     return jsonify(errno=RET.OK, errmsg='保存成功', data={'avatar_url': contants.QINIU_URL_DOMAIN + file_name})
 
 @api.route('/users/avatar', methods=['POST'])
 @login_required
@@ -18,26 +49,26 @@ def set_user_avatar():
     """
     user_id = g.user_id
     image_file = request.files.get('avatar')
+    project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    image_path = os.path.join(os.path.join(project_dir, contants.USER_PATH), image_file.filename)
     if image_file is None:
         return jsonify(errno=RET.PARAMERR, errmsg='未上传图片')
-
     image_data = image_file.read()
-    # 调用七牛上传图片
+    current_app.logger.info(image_file.__dict__)
+    with open(image_path, 'wb') as f:
+        f.write(image_data)
+    # 把路径存储到用户表中
+    avatar_url = contants.USER_PATH + image_file.filename
     try:
-        file_name = storage(image_data)
-    except Exception as e:
-        current_app.logger.error(e)
-        return jsonify(errno=RET.THIRDERR, errmsg='图片上传异常')
-    # 保存文件名到数据库中
-    try:
-        User.query.filter_by(id=user_id).update({"avatar_url": file_name})
+        user = User.query.filter_by(id=user_id).first()
+        user.avatar_url = avatar_url
+        db.session.add(user)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(e)
-        return jsonify(errno=RET.DBERR, errmsg='保存图片失败')
-
-    return jsonify(errno=RET.OK, errmsg='保存成功', data={'avatar_url': contants.QINIU_URL_DOMAIN + file_name})
+        return jsonify(errno=RET.DBERR, errmsg='数据库错误')
+    return jsonify(errno=RET.OK, errmsg='保存成功', data={'avatar_url': contants.USER_PATH + image_file.filename})
 
 
 @api.route('/users/name', methods=['PUT'])

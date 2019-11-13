@@ -18,7 +18,7 @@ $(document).ready(function(){
     $('.modal').on('show.bs.modal', centerModals);      //当模态框出现的时候
     $(window).on('resize', centerModals);
     // 查询房客订单
-    $.get("/api/v1_0/user/orders?role=custom", function(resp){
+    $.get("/api/v1.0/user/orders?role=custom", function(resp){
         if (resp.errno == 0) {
             $(".orders-list").html(template("orders-list-tmpl", {orders:resp.data.orders}));
 
@@ -26,7 +26,7 @@ $(document).ready(function(){
             $(".order-pay").on("click", function () {
                 var orderId = $(this).parents("li").attr("order-id");
                 $.ajax({
-                    url: "/api/v1_0/orders/" + orderId + "/payment",
+                    url: "/api/v1.0/orders/" + orderId + "/payment",
                     type: "post",
                     dataType: "json",
                     headers: {
@@ -56,7 +56,7 @@ $(document).ready(function(){
                 };
                 // 处理评论
                 $.ajax({
-                    url:"/api/v1_0/orders/"+orderId+"/comment",
+                    url:"/api/v1.0/orders/"+orderId+"/comment",
                     type:"PUT",
                     data:JSON.stringify(data),
                     contentType:"application/json",

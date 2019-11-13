@@ -44,7 +44,7 @@ function updateHouseData(action) {
         sk:sortKey,
         p:next_page
     };
-    $.get("/api/v1_0/houses", params, function(resp){
+    $.get("/api/v1.0/houses", params, function(resp){
         house_data_querying = false;
         if (resp.errno  == 0) {
             if (0 == resp.data.total_page) {
@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 
     // 获取筛选条件中的城市区域信息
-    $.get("/api/v1_0/areas", function(data){
+    $.get("/api/v1.0/areas", function(data){
         if (data.errno == 0) {
             // 用户从首页跳转到这个搜索页面时可能选择了城区，所以尝试从url的查询字符串参数中提取用户选择的城区
             var areaId = queryData["aid"];

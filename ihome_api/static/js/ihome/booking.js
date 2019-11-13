@@ -26,7 +26,7 @@ function showErrorMsg() {
 
 $(document).ready(function(){
     // 判断用户是否登录
-    $.get("/api/v1_0/session", function(resp) {
+    $.get("/api/v1.0/session", function(resp) {
         if ("0" != resp.errno) {
             location.href = "/login.html";
         }
@@ -56,7 +56,7 @@ $(document).ready(function(){
     var houseId = queryData["hid"];
 
     // 获取房屋的基本信息
-    $.get("/api/v1_0/houses/" + houseId, function(resp){
+    $.get("/api/v1.0/houses/" + houseId, function(resp){
         if (0 == resp.errno) {
             $(".house-info>img").attr("src", resp.data.house.img_urls[0]);
             $(".house-text>h3").html(resp.data.house.title);
